@@ -11,6 +11,11 @@ type Props = {
   onRemover: (id: string) => void
 }
 
+function cortarTexto(texto: string, limite: number) {
+  if (texto.length <= limite) return texto
+  return texto.substring(0, limite) + '...'
+}
+
 export function TurmaCard({ turma, onEditar, onRemover }: Props) {
   return (
     <Box mt="$4" p="$4" borderRadius="$2xl" bg="$backgroundLight0">
@@ -18,10 +23,10 @@ export function TurmaCard({ turma, onEditar, onRemover }: Props) {
       <Box flexDirection="row" justifyContent="space-between" alignItems="center">
 
         <Box>
-          <Text color="$gray500">Escola {turma.escolaNome}</Text>
+          <Text color="$gray500" >Escola {cortarTexto(turma.escolaNome, 20)}</Text>
 
           <Text bold size="lg">
-            {turma.nome}
+            {cortarTexto(turma.nome, 20)}
           </Text>
 
           <Text>

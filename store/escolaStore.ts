@@ -11,7 +11,7 @@ interface EscolaStore {
   removerEscola: (id: string) => Promise<void>
 
   adicionarTurma: (escolaId: string, dados: Omit<Turma, 'id'>) => Promise<void>
-  editarTurma: (id: string, dados: Omit<Turma, 'id'>) => Promise<void>
+  editarTurma: (id: string, escolaId: string, dados: Omit<Turma, 'id'>) => Promise<void>
   removerTurma: (id: string) => Promise<void>
 }
 
@@ -62,16 +62,44 @@ export const useEscolaStore = create<EscolaStore>((set) => ({
     set({ escolas })
   },
 
-  editarTurma: async (id, dados) => {
-    const turmaAtualizada: Turma = {
-      ...dados,
-      id
-    }
-
-    await escolaRepository.editarTurma(id, turmaAtualizada)
-
+  editarTurma: async (id, escolaId, dados) => {
     const escolas = await escolaRepository.listar()
-    set({ escolas })
+
+    let turmaAntiga: Turma | null = null
+    const escolasSemTurma = escolas.map((escola) => {
+      const encontrou = escola.turmas.find(t => t.id === id)
+
+      if (encontrou) {
+        turmaAntiga = encontrou
+        return {
+          ...escola,
+          turmas: escola.turmas.filter(t => t.id !== id)
+        }
+      }
+
+      return escola
+    })
+
+    const escolasAtualizadas = escolasSemTurma.map((escola) => {
+      if (escola.id === escolaId) {
+        return {
+          ...escola,
+          turmas: [
+            ...escola.turmas,
+            {
+              ...turmaAntiga!,
+              ...dados,
+              id
+            }
+          ]
+        }
+      }
+      return escola
+    })
+
+    await escolaRepository.salvarTodas(escolasAtualizadas)
+
+    set({ escolas: escolasAtualizadas })
   },
 
   removerTurma: async (id) => {

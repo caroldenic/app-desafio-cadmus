@@ -62,7 +62,12 @@ export function ModalTurma(props: Props) {
           <Text>Escola:</Text>
           <Select selectedValue={props.escolaId} onValueChange={props.setEscolaId}>
             <SelectTrigger>
-              <SelectInput placeholder="Selecione a escola" />
+              <SelectInput
+                placeholder="Selecione a escola"
+                value={
+                  props.escolas.find(e => e.id === props.escolaId)?.nome || ''
+                }
+              />
             </SelectTrigger>
 
             <SelectPortal>

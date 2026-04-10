@@ -8,6 +8,11 @@ type Props = {
   onRemover: (id: string) => void
 }
 
+function cortarTexto(texto: string, limite: number) {
+  if (texto.length <= limite) return texto
+  return texto.substring(0, limite) + '...'
+}
+
 export function EscolaCard({ escola, onEditar, onRemover }: Props) {
   return (
     <Box
@@ -28,7 +33,7 @@ export function EscolaCard({ escola, onEditar, onRemover }: Props) {
             <Box>
 
             <Text color="$pink700" bold size="lg" alignSelf="center">
-                Escola {escola.nome}
+                Escola {cortarTexto(escola.nome, 20)}
             </Text>
             
             <Text mt="$1" alignSelf="center">

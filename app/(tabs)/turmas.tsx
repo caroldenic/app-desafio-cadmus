@@ -33,7 +33,7 @@ export default function TurmasScreen() {
     }
 
     if (editandoId) {
-      await editarTurma(editandoId, {
+      await editarTurma(editandoId, escolaId, {
         nome,
         turno: turno as Periodo,
         ano: Number(ano),

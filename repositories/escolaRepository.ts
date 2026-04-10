@@ -44,6 +44,10 @@ export const escolaRepository = {
       ...e,
       turmas: e.turmas.filter(t => t.id !== turmaId)
     }))
-  }
+  },
+
+  salvarTodas: async (escolas: Escola[]) => {
+  localStorage.setItem('escolas', JSON.stringify(escolas))
+}
 
 }
